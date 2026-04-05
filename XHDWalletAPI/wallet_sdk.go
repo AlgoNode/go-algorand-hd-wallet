@@ -39,7 +39,7 @@ func (w *Wallet) Path(account, change, keyIndex uint32) AlgoPath {
 }
 
 // AlgorandAddress derives and returns the Algorand address for this path.
-func (ap *AlgoPath) AlgorandAddress() (types.Address, error) {
+func (ap AlgoPath) AlgorandAddress() (types.Address, error) {
 	pk, err := ap.w.AlgorandAddress(ap.account, ap.change, ap.keyIndex)
 	if err != nil {
 		return types.Address{}, err
@@ -50,19 +50,19 @@ func (ap *AlgoPath) AlgorandAddress() (types.Address, error) {
 }
 
 // SignData signs arbitrary data with the key at this path making sure that there is no known Algorand TX type prefix.
-func (ap *AlgoPath) SignData(data []byte) ([]byte, error) {
+func (ap AlgoPath) SignData(data []byte) ([]byte, error) {
 	return ap.w.SignData(ap.ctx, ap.account, ap.change, ap.keyIndex, data)
 }
 
 // SignBytes signs raw bytes with the key at this path, with no domain separator or prefix applied.
-func (ap *AlgoPath) SignBytes(data []byte) ([]byte, error) {
+func (ap AlgoPath) SignBytes(data []byte) ([]byte, error) {
 	return ap.w.SignBytes(ap.ctx, ap.account, ap.change, ap.keyIndex, data)
 }
 
 // SignTransaction returns the bytes of a signed transaction ready to be broadcasted to the network
 // If the derived address is different than the txn sender's, the derived
 // corresponding address will be assigned as AuthAddr
-func (ap *AlgoPath) SignTransaction(tx types.Transaction) (txid string, stxBytes []byte, err error) {
+func (ap AlgoPath) SignTransaction(tx types.Transaction) (txid string, stxBytes []byte, err error) {
 	toBeSigned := rawTransactionBytesToSign(tx)
 	txid = txIDFromRawTxnBytesToSign(toBeSigned)
 	signature, err := ap.w.SignAlgoTransaction(ap.ctx, ap.account, ap.change, ap.keyIndex, toBeSigned)
