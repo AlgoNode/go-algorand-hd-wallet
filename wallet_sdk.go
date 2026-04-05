@@ -5,6 +5,7 @@ import (
 	"github.com/algorand/go-algorand-sdk/v2/types"
 )
 
+// Algorand Go SDK compatibile wrapper with simplified path interface
 type AlgoPath struct {
 	w   *Wallet
 	ctx KeyContext
